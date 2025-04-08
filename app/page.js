@@ -318,7 +318,7 @@ export default function Home() {
                                     ) : (
                                         <button
                                             onClick={() => toggleRaffleSelection(item.id)}
-                                            className={`mt-4 w-full px-4 py-2 border text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-300 ${selectedRaffles.includes(item.id)
+                                            className={`cursor-pointer mt-4 w-full px-4 py-2 border text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-300 ${selectedRaffles.includes(item.id)
                                                 ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white border-transparent shadow-lg'
                                                 : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:shadow-md'
                                                 }`}
@@ -503,7 +503,7 @@ export default function Home() {
                                 <button
                                     type="submit"
                                     disabled={donationAmount <= 0 || selectedRaffles.length === 0 || !name || !email || isSubmitting}
-                                    className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-lg text-sm font-medium text-white bg-gradient-to-r from-[#4B2E83] to-[#5d3da0] hover:from-[#5d3da0] hover:to-[#6e4eaf] focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-purple-300/40"
+                                    className="cursor-pointer w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-lg text-sm font-medium text-white bg-gradient-to-r from-[#4B2E83] to-[#5d3da0] hover:from-[#5d3da0] hover:to-[#6e4eaf] focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-purple-300/40"
                                 >
                                     {isSubmitting ? (
                                         <span className="flex items-center">
