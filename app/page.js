@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from "../lib/firebase";
+import Link from 'next/link';
 
 export default function Home() {
     // Lambda Chi Alpha colors
@@ -167,22 +168,22 @@ export default function Home() {
                             </div>
                         </div>
                         <div className="hidden md:flex space-x-8 text-white">
-                            <a href="#raffle" className="hover:text-yellow-200 transition-colors duration-300 relative group">
+                            <Link href="#raffle" className="hover:text-yellow-200 transition-colors duration-300 relative group">
                                 Raffle Items
                                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-200 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                            </a>
-                            <a href="#donate" className="hover:text-yellow-200 transition-colors duration-300 relative group">
+                            </Link>
+                            <Link href="#donate" className="hover:text-yellow-200 transition-colors duration-300 relative group">
                                 Donate
                                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-200 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                            </a>
-                            <a href="#about" className="hover:text-yellow-200 transition-colors duration-300 relative group">
+                            </Link>
+                            <Link href="#about" className="hover:text-yellow-200 transition-colors duration-300 relative group">
                                 About
                                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-200 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                            </a>
-                            <a href="/admin" className="hover:text-yellow-200 transition-colors duration-300 relative group">
+                            </Link>
+                            <Link href="/admin" className="hover:text-yellow-200 transition-colors duration-300 relative group">
                                 Admin
                                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-200 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                            </a>
+                            </Link>
                         </div>
                         <div className="md:hidden">
                             <button
@@ -202,10 +203,10 @@ export default function Home() {
                     {/* Mobile menu */}
                     {mobileMenuOpen && (
                         <div className="md:hidden mt-2 py-2 bg-white rounded-md shadow-lg">
-                            <a href="#raffle" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setMobileMenuOpen(false)}>Raffle Items</a>
-                            <a href="#donate" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setMobileMenuOpen(false)}>Donate</a>
-                            <a href="#about" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setMobileMenuOpen(false)}>About</a>
-                            <a href="/admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setMobileMenuOpen(false)}>Admin</a>
+                            <Link href="#raffle" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setMobileMenuOpen(false)}>Raffle Items</Link>
+                            <Link href="#donate" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setMobileMenuOpen(false)}>Donate</Link>
+                            <Link href="#about" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setMobileMenuOpen(false)}>About</Link>
+                            <Link href="/admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setMobileMenuOpen(false)}>Admin</Link>
                         </div>
                     )}
                 </div>
@@ -253,18 +254,18 @@ export default function Home() {
                             Support our chapter and enter for a chance to win amazing prizes!
                         </p>
                         <div className="mt-8 flex justify-center">
-                            <a
+                            <Link
                                 href="#donate"
                                 className="px-8 py-3 text-base font-medium rounded-md text-white bg-[#4B2E83] hover:bg-opacity-90 md:text-lg shadow-lg hover:shadow-purple-300/50 transition-all duration-300 transform hover:scale-105 hover:bg-[#5d3da0]"
                             >
                                 Donate Now
-                            </a>
-                            <a
+                            </Link>
+                            <Link
                                 href="#raffle"
                                 className="ml-4 px-8 py-3 text-base font-medium rounded-md text-white bg-[#85754D] hover:bg-opacity-90 md:text-lg shadow-lg hover:shadow-amber-300/50 transition-all duration-300 transform hover:scale-105 hover:bg-[#9a8a5a]"
                             >
                                 View Prizes
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -534,20 +535,20 @@ export default function Home() {
 
                     <div className="prose prose-lg mx-auto">
                         <p className="text-gray-800">
-                            The LXA × LBF Parents Weekend fundraiser is an annual event that helps support our chapter's operations,
+                            The LXA × LBF Parents Weekend fundraiser is an annual event that helps support our chapters operations,
                             community service initiatives, and brotherhood events. All proceeds go directly to the Lambda Chi Alpha
                             chapter to continue our tradition of excellence and service.
                         </p>
 
                         <p className="text-gray-800">
                             This year, we have partnered with local businesses to bring you an exciting collection of raffle prizes.
-                            For every dollar you donate, you'll receive one raffle ticket that you can allocate to any prize of your choice.
+                            For every dollar you donate, you will receive one raffle ticket that you can allocate to any prize of your choice.
                         </p>
 
                         <h3 className="text-[#4B2E83] font-semibold mt-6 mb-3">How It Works</h3>
                         <ol className="list-decimal pl-6 my-3 text-gray-800">
                             <li>Choose your donation amount</li>
-                            <li>Select which prize(s) you'd like to enter to win</li>
+                            <li>Select which prize(s) you would like to enter to win</li>
                             <li>Your tickets will be distributed evenly among your selected prizes</li>
                             <li>Winners will be announced at the end of Parents Weekend</li>
                         </ol>

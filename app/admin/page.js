@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
+import Link from 'next/link';
 
 export default function AdminPage() {
     const [donations, setDonations] = useState([]);
@@ -89,22 +90,22 @@ export default function AdminPage() {
                             </div>
                         </div>
                         <div className="hidden md:flex space-x-8 text-white">
-                            <a href="/" className="hover:text-yellow-200 transition-colors duration-300 relative group">
+                            <Link href="/" className="hover:text-yellow-200 transition-colors duration-300 relative group">
                                 Home
                                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-200 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                            </a>
-                            <a href="/#raffle" className="hover:text-yellow-200 transition-colors duration-300 relative group">
+                            </Link>
+                            <Link href="/#raffle" className="hover:text-yellow-200 transition-colors duration-300 relative group">
                                 Raffle Items
                                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-200 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                            </a>
-                            <a href="/#donate" className="hover:text-yellow-200 transition-colors duration-300 relative group">
+                            </Link>
+                            <Link href="/#donate" className="hover:text-yellow-200 transition-colors duration-300 relative group">
                                 Donate
                                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-200 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                            </a>
-                            <a href="/admin" className="hover:text-yellow-200 transition-colors duration-300 relative group">
+                            </Link>
+                            <Link href="/admin" className="hover:text-yellow-200 transition-colors duration-300 relative group">
                                 Admin
                                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-200 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
