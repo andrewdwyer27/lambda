@@ -1,6 +1,8 @@
-"use client";
+"use client"
 
 import { useState } from 'react';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from "../lib/firebase";
 
 export default function Home() {
     // Lambda Chi Alpha colors
@@ -16,6 +18,9 @@ export default function Home() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submissionError, setSubmissionError] = useState(null);
+    const [donationId, setDonationId] = useState(null);
 
     // Raffle items
     const raffleItems = [
@@ -39,12 +44,35 @@ export default function Home() {
     };
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (donationAmount > 0 && selectedRaffles.length > 0 && name && email) {
-            setSubmitted(true);
-            // In a real app, you would send this data to your server
-            console.log('Submission data:', { name, email, donationAmount, selectedRaffles });
+            setIsSubmitting(true);
+            setSubmissionError(null);
+
+            try {
+                const ticketsPerRaffle = Math.floor(donationAmount / selectedRaffles.length);
+
+                const donationData = {
+                    name,
+                    email,
+                    amount: donationAmount,
+                    selectedRaffles,
+                    ticketsPerRaffle,
+                    totalTickets: donationAmount,
+                    timestamp: new Date(),
+                };
+
+                const docRef = await addDoc(collection(db, 'donations'), donationData);
+                setDonationId(docRef.id);
+                setSubmitted(true);
+            } catch (error) {
+                console.error('Submission error:', error);
+                setSubmissionError('An unexpected error occurred. Please try again.');
+            } finally {
+                setIsSubmitting(false);
+            }
         }
     };
 
@@ -58,7 +86,7 @@ export default function Home() {
 
     // Custom icons for raffle items
     const getRaffleIcon = (id) => {
-        switch(id) {
+        switch (id) {
             case 1: // Craft Brews
                 return (
                     <div className="w-full h-full flex items-center justify-center relative">
@@ -151,6 +179,10 @@ export default function Home() {
                                 About
                                 <span className="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-200 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
                             </a>
+                            <a href="/admin" className="hover:text-yellow-200 transition-colors duration-300 relative group">
+                                Admin
+                                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-yellow-200 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                            </a>
                         </div>
                         <div className="md:hidden">
                             <button
@@ -173,6 +205,7 @@ export default function Home() {
                             <a href="#raffle" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setMobileMenuOpen(false)}>Raffle Items</a>
                             <a href="#donate" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setMobileMenuOpen(false)}>Donate</a>
                             <a href="#about" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setMobileMenuOpen(false)}>About</a>
+                            <a href="/admin" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => setMobileMenuOpen(false)}>Admin</a>
                         </div>
                     )}
                 </div>
@@ -186,7 +219,7 @@ export default function Home() {
                     <div className="absolute top-0 right-10 w-32 h-32 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
                     <div className="absolute -bottom-10 left-1/3 w-32 h-32 bg-[#85754D] rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
                 </div>
-                
+
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="text-center">
                         <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl relative">
@@ -244,7 +277,7 @@ export default function Home() {
                 <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-gray-100 to-transparent"></div>
                 <div className="absolute -left-16 top-1/4 w-32 h-32 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
                 <div className="absolute -right-16 top-3/4 w-32 h-32 bg-yellow-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-700"></div>
-                
+
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl relative inline-block">
@@ -260,11 +293,10 @@ export default function Home() {
                         {raffleItems.map((item) => (
                             <div
                                 key={item.id}
-                                className={`border rounded-lg overflow-hidden shadow-xl transition-all duration-200 hover:shadow-2xl ${
-                                    selectedRaffles.includes(item.id) 
-                                    ? 'ring-4 ring-offset-2 ring-[#4B2E83] transform scale-105' 
+                                className={`border rounded-lg overflow-hidden shadow-xl transition-all duration-200 hover:shadow-2xl ${selectedRaffles.includes(item.id)
+                                    ? 'ring-4 ring-offset-2 ring-[#4B2E83] transform scale-105'
                                     : 'hover:scale-102 hover:border-purple-300'
-                                }`}
+                                    }`}
                                 style={{
                                     borderColor: selectedRaffles.includes(item.id) ? '#4B2E83' : 'transparent'
                                 }}
@@ -286,11 +318,10 @@ export default function Home() {
                                     ) : (
                                         <button
                                             onClick={() => toggleRaffleSelection(item.id)}
-                                            className={`mt-4 w-full px-4 py-2 border text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-300 ${
-                                                selectedRaffles.includes(item.id)
+                                            className={`mt-4 w-full px-4 py-2 border text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-300 ${selectedRaffles.includes(item.id)
                                                 ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white border-transparent shadow-lg'
                                                 : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:shadow-md'
-                                            }`}
+                                                }`}
                                         >
                                             {selectedRaffles.includes(item.id) ? (
                                                 <span className="flex items-center justify-center">
@@ -355,6 +386,21 @@ export default function Home() {
                             onSubmit={handleSubmit}
                             className="max-w-md mx-auto bg-white p-8 border border-gray-200 rounded-lg shadow-md"
                         >
+                            {submissionError && (
+                                <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4">
+                                    <div className="flex">
+                                        <div className="flex-shrink-0">
+                                            <svg className="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                        </div>
+                                        <div className="ml-3">
+                                            <p className="text-sm text-red-700">{submissionError}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="mb-6">
                                 <label htmlFor="name" className="block text-gray-800 text-sm font-medium mb-2">
                                     Name <span className="text-red-500">*</span>
@@ -404,11 +450,10 @@ export default function Home() {
                                             />
                                             <label
                                                 htmlFor={`amount-${amount}`}
-                                                className={`block w-full py-3 text-center border rounded-md cursor-pointer focus:outline-none ${
-                                                    donationAmount === amount
+                                                className={`block w-full py-3 text-center border rounded-md cursor-pointer focus:outline-none ${donationAmount === amount
                                                     ? 'border-2 text-white bg-[#4B2E83]'
                                                     : 'border-gray-400 text-gray-700 hover:border-gray-500'
-                                                }`}
+                                                    }`}
                                             >
                                                 ${amount}
                                             </label>
@@ -457,10 +502,20 @@ export default function Home() {
                             <div>
                                 <button
                                     type="submit"
-                                    disabled={donationAmount <= 0 || selectedRaffles.length === 0 || !name || !email}
+                                    disabled={donationAmount <= 0 || selectedRaffles.length === 0 || !name || !email || isSubmitting}
                                     className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-lg text-sm font-medium text-white bg-gradient-to-r from-[#4B2E83] to-[#5d3da0] hover:from-[#5d3da0] hover:to-[#6e4eaf] focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-purple-300/40"
                                 >
-                                    Complete Donation
+                                    {isSubmitting ? (
+                                        <span className="flex items-center">
+                                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            Processing...
+                                        </span>
+                                    ) : (
+                                        "Complete Donation"
+                                    )}
                                 </button>
                             </div>
                         </form>
